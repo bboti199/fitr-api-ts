@@ -6,18 +6,24 @@ import {
   Delete,
   Param,
   Patch,
+  HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { ExerciseService } from './exercise.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { FirebaseAuthGuard } from 'src/user/guards/auth.guard';
+import { IUser } from 'src/user/interfaces/user.interface';
+import { User } from 'src/user/decorators/user.decorator';
 
+@UseGuards(FirebaseAuthGuard)
 @Controller('exercise')
 export class ExerciseController {
   constructor(private exerciseService: ExerciseService) {}
 
   @Get()
-  async findAll() {
-    const exercises = await this.exerciseService.findAll();
+  async findAll(@User() user: IUser) {
+    const exercises = await this.exerciseService.findAll(user);
     return {
       count: exercises.length,
       data: exercises,
@@ -25,8 +31,8 @@ export class ExerciseController {
   }
 
   @Get('compound')
-  async findCompound() {
-    const exercises = await this.exerciseService.findCompound();
+  async findCompound(@User() user: IUser) {
+    const exercises = await this.exerciseService.findCompound(user);
     return {
       count: exercises.length,
       data: exercises,
@@ -34,33 +40,29 @@ export class ExerciseController {
   }
 
   @Get('isolation')
-  async findIsolation() {
-    const exercises = await this.exerciseService.findIsolation();
+  async findIsolation(@User() user: IUser) {
+    const exercises = await this.exerciseService.findIsolation(user);
     return {
       count: exercises.length,
       data: exercises,
     };
   }
 
-  @Get(':id')
-  async findOne(@Param('id') exerciseId: string) {
-    const exercise = await this.exerciseService.findById(exerciseId);
-    return {
-      data: exercise,
-    };
-  }
-
   @Post()
-  async create(@Body() createExerciseDto: CreateExerciseDto) {
-    const exercise = await this.exerciseService.create(createExerciseDto);
+  @HttpCode(201)
+  async create(
+    @Body() createExerciseDto: CreateExerciseDto,
+    @User() user: IUser,
+  ) {
+    const exercise = await this.exerciseService.create(createExerciseDto, user);
     return {
       data: exercise,
     };
   }
 
   @Delete(':id')
-  async delete(@Param('id') exerciseId: string) {
-    const exercise = await this.exerciseService.delete(exerciseId);
+  async delete(@Param('id') exerciseId: string, @User() user: IUser) {
+    const exercise = await this.exerciseService.delete(exerciseId, user);
     return {
       data: exercise,
     };
@@ -70,9 +72,14 @@ export class ExerciseController {
   async update(
     @Param('id') exerciseId: string,
     @Body() updateExerciseDto: UpdateExerciseDto,
+    @User() user: IUser,
   ) {
     return {
-      data: await this.exerciseService.update(exerciseId, updateExerciseDto),
+      data: await this.exerciseService.update(
+        exerciseId,
+        updateExerciseDto,
+        user,
+      ),
     };
   }
 }

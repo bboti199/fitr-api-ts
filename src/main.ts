@@ -2,8 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as admin from 'firebase-admin';
+import { ServiceAccount } from 'firebase-admin';
+
+const adminConfig: ServiceAccount = JSON.parse(process.env.FIREBASE_CREDS);
 
 async function bootstrap() {
+  admin.initializeApp({
+    credential: admin.credential.cert(adminConfig),
+    databaseURL: process.env.FIREBASE_DB_URL,
+  });
   const app = await NestFactory.create(AppModule);
   const options = new DocumentBuilder()
     .setTitle('FitR Backend')
