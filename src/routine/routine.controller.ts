@@ -16,6 +16,7 @@ import { IUser } from 'src/user/interfaces/user.interface';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { TimePeriodType } from './interfaces/routine.interface';
 
 @ApiBearerAuth()
 @ApiTags('routines')
@@ -36,11 +37,24 @@ export class RoutineController {
 
   @Get(':id/history')
   async getHistory(@User() user: IUser, @Param('id') routineId: string) {
-    const routine = await this.routineService.getHistory(user, routineId);
+    const routineHistory = await this.routineService.getHistory(
+      user,
+      routineId,
+    );
 
     return {
-      data: routine,
+      count: routineHistory.length,
+      data: routineHistory,
     };
+  }
+
+  @Get(':id/chart/:timePeriod')
+  async getChartData(
+    @User() user: IUser,
+    @Param('id') routineId: string,
+    @Param('timePeriod') timePeriod: TimePeriodType,
+  ) {
+    return this.routineService.getChartData(user, routineId, timePeriod);
   }
 
   @Post()

@@ -11,6 +11,13 @@ export interface IRoutine extends Document {
   updatedAt: Date;
 }
 
+export enum TimePeriodType {
+  all = 'all',
+  week = 'week',
+  month = 'month',
+  year = 'year',
+}
+
 export class RoutineDataType {
   @IsMongoId()
   @IsNotEmpty()
