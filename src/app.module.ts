@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ExerciseModule } from './exercise/exercise.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
+import { RoutineModule } from './routine/routine.module';
+import { LogModule } from './log/log.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { UserModule } from './user/user.module';
     }),
     ExerciseModule,
     UserModule,
+    RoutineModule,
+    LogModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService],

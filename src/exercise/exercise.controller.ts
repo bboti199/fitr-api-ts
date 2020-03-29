@@ -15,7 +15,10 @@ import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { FirebaseAuthGuard } from 'src/user/guards/auth.guard';
 import { IUser } from 'src/user/interfaces/user.interface';
 import { User } from 'src/user/decorators/user.decorator';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('exercises')
 @UseGuards(FirebaseAuthGuard)
 @Controller('exercise')
 export class ExerciseController {

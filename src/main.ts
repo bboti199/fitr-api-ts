@@ -13,15 +13,17 @@ async function bootstrap() {
     databaseURL: process.env.FIREBASE_DB_URL,
   });
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api/v1');
+
   const options = new DocumentBuilder()
     .setTitle('FitR Backend')
     .setDescription('Backend for workout tracking application')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
 
-  app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }

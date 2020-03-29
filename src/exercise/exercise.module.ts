@@ -7,8 +7,10 @@ import { UserSchema } from 'src/user/schemas/user.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Exercise', schema: ExerciseSchema }]),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'Exercise', schema: ExerciseSchema },
+      { name: 'User', schema: UserSchema },
+    ]),
   ],
   providers: [ExerciseService],
   controllers: [ExerciseController],
