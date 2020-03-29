@@ -3,7 +3,7 @@
 </p>
 
 ## Links
-[Live version](https://fitr-api-v1.herokuapp.com/)
+[Live version](https://fitr-api-v1.herokuapp.com/)  
 [Documentation](https://fitr-api-v1.herokuapp.com/docs)
 
 ## Description
