@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+      target: production
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+      - 9229:9229
+    command: yarn run start:prod
+    links:
+      - redis_cache
+    env_file:
+      - .env
+    networks:
+      - webnet
+    depends_on:
+      - redis_cache
+  redis_cache:
+    container_name: redis_cache
+    image: redis:latest
+    networks:
+      - webnet
+networks:
+  webnet:
